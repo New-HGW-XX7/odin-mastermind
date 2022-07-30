@@ -92,7 +92,7 @@ class Player
     return true if eval_result == true
 
     self.feedback_tracker = eval_result
-    puts "Feedbacktracker: #{feedback_tracker}"
+    #puts "Feedbacktracker: #{feedback_tracker}"
     self.improved_guess = [nil, nil, nil, nil]
 
     feedback_tracker.each_with_index do |el, i|
@@ -119,8 +119,7 @@ class Player
   end
 
 end
-############
-
+#####
 def framework
   setter = Setter.new
   player = Player.new
@@ -135,7 +134,7 @@ def framework
 
     i = 0
     while i < 12
-      puts "\nAttempt #{i + 1} out of 4"
+      puts "\nAttempt #{i + 1} out of 12"
 
       puts "Choose 4 colours in order"
       #puts "Solution: #{code.solution}"
@@ -145,9 +144,8 @@ def framework
       result = code.evaluate_guess(player_guess)
       i = 12 if result == true
       i += 1
-      puts "You lose" if i == 12
+      puts "You lose. The solution is #{code.solution}" if i == 12
     end
-    puts "The solution is #{code.solution}"
 
   elsif role_choice == 2
     puts "Choose 4 colours in order to generate a code"
@@ -160,16 +158,15 @@ def framework
 
     i = 0
     while i < 12
-      puts "\nAttempt #{i + 1} out of 4"
+      puts "\nAttempt #{i + 1} out of 12"
 
       player.guess_code(code, computer_generated_guess) if i == 0
 
       result = player.guess_code(code, player.improved_guess)
       i = 12 if result == true
       i += 1
-      puts "Computer loses" if i == 12
+      puts "Computer loses. The solution is #{code.solution}" if i == 12
     end
-    puts "The solution is #{code.solution}"
 
   else
     puts "Please choose 1 or 2"
