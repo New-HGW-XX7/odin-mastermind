@@ -121,41 +121,59 @@ class Player
 end
 ############
 
-setter = Setter.new
-player = Player.new
-code1 = Code.new
+def framework
+  setter = Setter.new
+  player = Player.new
+  code = Code.new
+  puts "Player (1) or Setter (2)?"
+  role_choice = gets.chomp.to_i
 
-puts "Player (1) or Setter (2)?"
-choice = gets.chomp.to_i
+  if role_choice == 1
+    computer_generated_solution = []
+    4.times { computer_generated_solution << ['red', 'blue', 'green', 'yellow', 'orange', 'brown'].sample }
+    code.solution = computer_generated_solution
 
-if choice == 1
-  computer_generated_solution = []
-  4.times { computer_generated_solution << ['red', 'blue', 'green', 'yellow', 'orange', 'brown'].sample }
-  code1.solution = computer_generated_solution
+    i = 0
+    while i < 12
+      puts "\nAttempt #{i + 1} out of 4"
 
-  i = 0
-  while i < 4
-    puts "\nAttempt #{i + 1} out of 4"
-    puts "Choose 4 colours in order"
-    player_guess = []
-    4.times { player_guess << gets.chomp }
-    result = code1.evaluate_guess(player_guess)
-    return p "You win" if result == true
-    i += 1
+      puts "Choose 4 colours in order"
+      #puts "Solution: #{code.solution}"
+      player_guess = []
+      4.times { player_guess << gets.chomp }
+
+      result = code.evaluate_guess(player_guess)
+      i = 12 if result == true
+      i += 1
+      puts "You lose" if i == 12
+    end
+    puts "The solution is #{code.solution}"
+
+  elsif role_choice == 2
+    puts "Choose 4 colours in order to generate a code"
+    player_code = []
+    4.times { player_code << gets.chomp }
+    setter.set_code(code, player_code)
+
+    computer_generated_guess = []
+    4.times { computer_generated_guess << ['red', 'blue', 'green', 'yellow', 'orange', 'brown'].sample }
+
+    i = 0
+    while i < 12
+      puts "\nAttempt #{i + 1} out of 4"
+
+      player.guess_code(code, computer_generated_guess) if i == 0
+
+      result = player.guess_code(code, player.improved_guess)
+      i = 12 if result == true
+      i += 1
+      puts "Computer loses" if i == 12
+    end
+    puts "The solution is #{code.solution}"
+
+  else
+    puts "Please choose 1 or 2"
+    framework
   end
-  puts "You lose"
-  puts "The solution is #{code1.solution}"
 end
-
-# setter.set_code(code1, ['red', 'yellow', 'green', 'blue'])
-# i = 0
-# puts "\nTurn #{i + 1}"
-# z = player.guess_code(code1, ['brown', 'brown', 'brown', 'brown'])
-# puts "Improved after first #{z}"
-
-# while i < 11
-# x = player.guess_code(code1, player.improved_guess)
-# i = 11 if x == true
-# puts "\nTurn #{i + 2}" if i + 1 < 12
-# i += 1
-# end
+framework
